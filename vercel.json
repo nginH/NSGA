@@ -1,12 +1,9 @@
 {
     "version": 2,
-    "routes": [
+    "rewrites": [
         {
-            "src": "/",
-            "dest": "/nsga_visualization.html"
-        },
-        {
-            "handle": "filesystem"
+            "source": "/",
+            "destination": "/nsga_visualization.html"
         }
     ],
     "cleanUrls": true
