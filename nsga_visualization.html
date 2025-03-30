@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NSGA Visualization</title>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .controls { margin: 20px 0; }
+        button { padding: 10px; margin-right: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Fast Non-dominated Sorting - 3D Visualization</h1>
+    <div class='controls'>
+        <button id='btnAllSolutions'>Show All Solutions</button>
+        <button id='btnParetoOnly'>Show Pareto-Optimal Only</button>
+        <button id='btnToggleSurface'>Toggle Pareto Surface</button>
+    </div>
+    <div id='plot' style='width:900px;height:700px;'></div>
+    <script>
+        // Data arrays
+        var x_rank0 = [0.213563, 0.496831, 0.977741, 1.173188, 1.713890, 1.999051, 2.643455, 2.797075, 3.131602, 3.635023, 3.765609, 4.556623, 4.932098, 5.121506, 5.759997, 5.986366, 6.482318, 6.564998, 7.438930, 7.480184, 8.135102, 8.261363, 8.927335, 8.999778, 9.685888];
+        var y_rank0 = [9.857553, 9.542442, 8.995525, 8.675246, 8.543483, 8.046574, 7.350705, 7.044424, 6.741942, 6.534832, 6.088223, 5.462718, 5.372072, 4.555585, 4.470844, 3.860623, 3.625375, 3.022405, 3.002090, 2.645389, 2.160410, 1.521810, 1.324292, 0.668384, 0.425637];
+        var z_rank0 = [-0.111313, 0.748698, 1.140051, 1.597632, 2.428280, 2.713702, 3.519199, 4.081039, 4.436932, 4.650172, 4.514753, 5.112883, 4.999535, 5.106711, 5.092844, 4.750284, 4.509017, 4.390560, 3.878940, 3.670493, 2.954226, 2.268979, 1.811725, 1.180036, 0.501715];
+        var x_rank1 = [3.071336, 3.274401, 3.968404, 4.122443, 5.343770, 5.544491, 5.932571, 6.077243, 6.802134, 7.020996, 7.401307, 7.876799, 8.416309, 8.783150, 9.062474, 9.590672, 9.923025, 10.121014, 10.790917, 11.167044, 11.342313, 12.076230, 12.379152, 12.841901];
+        var y_rank1 = [13.137887, 12.360288, 12.261139, 11.498892, 10.940293, 10.255782, 10.026991, 9.826717, 9.371150, 9.079356, 8.268055, 8.169135, 7.499249, 7.304237, 6.700977, 6.424120, 6.087286, 5.479737, 5.340869, 4.714269, 4.261295, 3.993201, 3.509410, 3.231526];
+        var z_rank1 = [3.324719, 3.638600, 4.163867, 4.960193, 6.277027, 6.468971, 6.882795, 7.533302, 7.413159, 7.731343, 8.132461, 7.944252, 7.949996, 8.099004, 7.716879, 7.642439, 6.945421, 6.792824, 6.185910, 5.732048, 5.355444, 4.721736, 3.848637, 3.621055];
+        var x_rank2 = [4.514107, 10.577824, 10.792486, 11.214118, 11.889388, 12.039669, 12.743603, 13.062442, 13.634477, 13.708187, 14.300533, 14.745854, 14.863749, 15.207428, 15.727576];
+        var y_rank2 = [11.502527, 11.182569, 10.810541, 10.485805, 10.051997, 9.619238, 9.439034, 8.966743, 8.460047, 8.099080, 7.965122, 7.267168, 7.025230, 6.538946, 5.965468];
+        var z_rank2 = [5.411119, 11.091601, 10.763217, 11.178411, 10.860656, 10.575551, 10.425980, 10.096068, 9.453073, 9.022425, 8.885114, 8.115085, 7.578571, 6.794122, 6.534962];
+        var x_rank3 = [6.419824, 6.497836, 7.104076, 7.522995, 7.569871, 8.178582, 8.739738, 8.766996, 9.414811, 9.620514, 10.248629, 17.063377, 17.467708, 17.916121, 18.607530, 19.074315];
+        var y_rank3 = [15.878693, 15.327684, 15.208942, 14.774943, 14.415636, 13.819683, 13.480318, 12.901329, 12.522145, 12.085518, 11.609348, 10.777484, 10.171839, 9.951961, 9.250345, 9.304276];
+        var z_rank3 = [6.405756, 7.024486, 7.725871, 7.888606, 8.865264, 9.004144, 9.546913, 10.186729, 10.374386, 10.547243, 11.056836, 11.312182, 10.989739, 10.205720, 9.825905, 8.915466];
+        var x_rank4 = [9.095125, 9.789175, 10.277948, 10.764575, 11.400387, 11.862844, 12.201226, 12.411438, 12.955262, 13.497220, 13.603766, 14.141625, 14.251211, 14.912298, 15.402324, 15.474112, 16.178859, 16.398506, 17.116046];
+        var y_rank4 = [18.858674, 18.064941, 17.663734, 17.004728, 16.904202, 16.211205, 15.710849, 15.534498, 14.891380, 14.871385, 14.399932, 13.990991, 13.608844, 13.286603, 12.455430, 12.308174, 11.782124, 11.690326, 11.181273];
+        var z_rank4 = [9.307578, 9.959783, 10.771880, 11.574672, 12.336193, 12.876840, 13.082813, 13.262857, 13.931973, 13.855084, 14.042481, 13.784391, 13.778269, 14.044504, 13.601106, 13.177628, 12.805719, 12.352908, 12.026322];
+        var x_rank5 = [10.531725];
+        var y_rank5 = [17.696992];
+        var z_rank5 = [11.117118];
+        // Create traces for each rank
+        var allTraces = [];
+        var paretoTrace = {
+            x: x_rank0,
+            y: y_rank0,
+            z: z_rank0,
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: {
+                size: 8,
+                color: 'rgb(255,0,0)',
+                line: { color: 'rgb(0,0,0)', width: 1 }
+            },
+            name: 'Pareto-Optimal (Rank 0)'
+        };
+        allTraces.push(paretoTrace);
+        var trace_rank1 = {
+            x: x_rank1,
+            y: y_rank1,
+            z: z_rank1,
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: {
+                size: 5,
+                color: 'rgb(0,255,0)',
+                opacity: 0.7
+            },
+            name: 'Rank 1'
+        };
+        allTraces.push(trace_rank1);
+        var trace_rank2 = {
+            x: x_rank2,
+            y: y_rank2,
+            z: z_rank2,
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: {
+                size: 5,
+                color: 'rgb(0,0,255)',
+                opacity: 0.7
+            },
+            name: 'Rank 2'
+        };
+        allTraces.push(trace_rank2);
+        var trace_rank3 = {
+            x: x_rank3,
+            y: y_rank3,
+            z: z_rank3,
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: {
+                size: 5,
+                color: 'rgb(255,255,0)',
+                opacity: 0.7
+            },
+            name: 'Rank 3'
+        };
+        allTraces.push(trace_rank3);
+        var trace_rank4 = {
+            x: x_rank4,
+            y: y_rank4,
+            z: z_rank4,
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: {
+                size: 5,
+                color: 'rgb(255,0,255)',
+                opacity: 0.7
+            },
+            name: 'Rank 4'
+        };
+        allTraces.push(trace_rank4);
+        var trace_rank5 = {
+            x: x_rank5,
+            y: y_rank5,
+            z: z_rank5,
+            mode: 'markers',
+            type: 'scatter3d',
+            marker: {
+                size: 5,
+                color: 'rgb(0,255,255)',
+                opacity: 0.7
+            },
+            name: 'Rank 5'
+        };
+        allTraces.push(trace_rank5);
+        // Create Pareto surface
+        var surfaceTrace = {
+            x: x_rank0,
+            y: y_rank0,
+            z: z_rank0,
+            type: 'mesh3d',
+            opacity: 0.7,
+            color: 'rgb(255,0,0)',
+            name: 'Pareto Surface',
+            visible: false
+        };
+        
+        // Create Pareto front line trace
+        var lineTrace = {
+            x: x_rank0,
+            y: y_rank0,
+            z: z_rank0,
+            type: 'scatter3d',
+            mode: 'lines',
+            line: {
+                color: 'rgb(255,0,0)',
+                width: 4
+            },
+            name: 'Pareto Front'
+        };
+        allTraces.push(lineTrace);
+        allTraces.push(surfaceTrace);
+        var layout = {
+            title: '3D Visualization of Solutions with Pareto Front',
+            scene: {
+                xaxis: {title: 'Objective 1'},
+                yaxis: {title: 'Objective 2'},
+                zaxis: {title: 'Objective 3'}
+            },
+            margin: {l: 0, r: 0, b: 0, t: 30},
+            legend: {x: 0, y: 1}
+        };
+        Plotly.newPlot('plot', allTraces, layout);
+        // Button event handlers
+        document.getElementById('btnAllSolutions').addEventListener('click', function() {
+            Plotly.newPlot('plot', allTraces, layout);
+        });
+        document.getElementById('btnParetoOnly').addEventListener('click', function() {
+            var paretoTraces = allTraces.filter(trace => 
+                trace.name === 'Pareto-Optimal (Rank 0)' || 
+                trace.name === 'Pareto Front');
+            Plotly.newPlot('plot', paretoTraces, layout);
+        });
+        document.getElementById('btnToggleSurface').addEventListener('click', function() {
+            surfaceTrace.visible = !surfaceTrace.visible;
+            Plotly.update('plot', {visible: [surfaceTrace.visible]}, {}, [allTraces.length - 1]);
+        });
+    </script>
+</body>
+</html>
