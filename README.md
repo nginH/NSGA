@@ -5,7 +5,7 @@ An efficient C implementation of the Fast Non-dominated Sorting algorithm with i
 ## Live Demo
 **[View the Interactive 3D Visualization](https://nsga.busbuddy-aus.in/nsga_visualization)**
 
-[![Live Demo](https://via.placeholder.com/600x300)](https://nsga.busbuddy-aus.in/nsga_visualization)
+![sample image](images/demo_plot.png)
 
 ## Overview
 
