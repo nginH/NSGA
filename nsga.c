@@ -1,7 +1,3 @@
-/*
- * nsga.c - Implementation of Fast Non-Dominated Sorting algorithm
- */
-
 #include "nsga.h"
 
 /*
