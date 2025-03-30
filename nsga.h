@@ -12,6 +12,12 @@
 #define NUM_PARAMETERS 30  /* Number of parameters/objectives for each solution */
 #define MAX_POPULATION 100 /* Maximum population size */
 
+/* Define indices for objectives */
+#define OBJ1_INDEX 0
+#define OBJ2_INDEX 1
+#define OBJ3_INDEX 2
+#define NUM_OBJECTIVES 3
+
 /* Structure to represent a solution with its parameters and dominance information */
 typedef struct {
     double parameters[NUM_PARAMETERS];  /* The objective values */

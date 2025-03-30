@@ -1,90 +1,48 @@
-# Fast Non-dominated Sorting Implementation
+# NSGA 3D Visualization
 
-This is a C implementation of the Fast Non-dominated Sorting algorithm used in multi-objective optimization problems, particularly in NSGA-II (Non-dominated Sorting Genetic Algorithm II).
+## Overview
+This interactive visualization demonstrates the Non-dominated Sorting Genetic Algorithm (NSGA) results in 3D space. It shows different ranks of solutions with emphasis on the Pareto-optimal front (Rank 0).
 
 ## Features
+- **Interactive 3D visualization** of multi-objective optimization results
+- **Color-coded solution ranks** (Rank 0-4)
+- **Toggle controls** to:
+  - View all solutions across different ranks
+  - Focus only on Pareto-optimal solutions
+  - Show/hide the Pareto surface
 
-- Handles solutions with 30 parameters/objectives
-- Efficient implementation of the Fast Non-dominated Sorting algorithm
-- Interactive 3D visualization of Pareto-optimal solutions
-- Well-structured and modular code
+## Preview
+![NSGA Visualization Preview](https://placeholder-for-your-screenshot.png)
 
-## Building the Project
+## Usage
 
-To build the project, simply run the `make` command:
+### Option 1: Direct HTML Opening
+Simply open the `nsga_visualization.html` file in any modern web browser. No server required.
 
-```
-make
-```
+### Option 2: Hosting
+For sharing with others, you can:
+1. Host on GitHub Pages
+2. Use a static site hosting service like Netlify or Vercel
+3. Deploy on any web server
 
-This will compile the source code and create an executable named `nsga`.
+## Implementation Details
+- Built using Plotly.js for 3D visualization
+- Demonstrates non-dominated sorting with 5 ranks of solutions
+- Highlights the Pareto front with both points and connecting lines
+- Optional mesh surface visualization of the Pareto front
 
-## Running the Program
+## Understanding the Visualization
+- **Red points (Rank 0)**: Pareto-optimal solutions
+- **Green points (Rank 1)**: Solutions dominated only by Rank 0
+- **Blue points (Rank 2)**: Solutions dominated by Ranks 0 and 1
+- **Yellow points (Rank 3)**: Solutions dominated by Ranks 0, 1, and 2
+- **Purple points (Rank 4)**: Solutions dominated by all previous ranks
 
-You can run the program using the `make run` command:
+The visualization helps understand the trade-offs between three conflicting objectives in the solution space.
 
-```
-make run
-```
+## Customization
+You can modify the data arrays in the JavaScript section to visualize your own multi-objective optimization results.
 
-Alternatively, you can run the executable directly:
-
-```
-./nsga
-```
-
-## Visualization
-
-The program provides multiple ways to visualize the Pareto-optimal solutions:
-
-### HTML/JavaScript Visualization
-
-An interactive 3D visualization is generated in `nsga_visualization.html`. Open this file in any web browser to:
-- View all solutions with Pareto-optimal solutions highlighted in red
-- Toggle between showing all solutions or only Pareto-optimal solutions
-- Show/hide the Pareto front surface
-- Rotate, zoom, and pan the 3D visualization
-
-### Gnuplot Visualization
-
-If you have Gnuplot installed, the program can generate a 3D plot with the Pareto front:
-
-```
-gnuplot nsga_plot.gp
-```
-
-### CSV Export
-
-For custom visualization in other tools (Excel, R, Python, etc.), the program exports:
-- `nsga_data.txt.csv`: Contains all solutions with columns for each objective and Pareto-optimality
-
-## Cleaning Up
-
-To clean up object files and the executable, use:
-
-```
-make clean
-```
-
-## Code Structure
-
-- `nsga.h`: Header file with data structures and function prototypes
-- `nsga.c`: Implementation of the Fast Non-dominated Sorting algorithm
-- `main.c`: Main program demonstrating the algorithm
-- `visualization.h`: Header file for visualization components
-- `visualization.c`: Implementation of visualization features
-- `Makefile`: Build system configuration
-
-## Algorithm
-
-The Fast Non-dominated Sorting algorithm works as follows:
-
-1. For each solution in the population, determine which solutions it dominates and which solutions dominate it
-2. Identify solutions that are not dominated by any other solution (rank 0) - these form the Pareto-optimal set
-3. Iteratively identify subsequent ranks by removing solutions from consideration
-
-A solution dominates another solution if it is not worse in any objective and better in at least one objective.
-
-## Pareto-Optimal Solutions
-
-The visualization highlights the Pareto-optimal solutions (rank 0) which represent the best trade-offs between the competing objectives. These solutions form what is known as the Pareto front - the set of solutions where no objective can be improved without degrading at least one other objective. 
+## Requirements
+- Any modern web browser with JavaScript enabled
+- Internet connection (to load the Plotly.js library from CDN)

@@ -11,7 +11,8 @@
 bool dominates(Solution *solution1, Solution *solution2) {
     bool at_least_one_better = false;
     
-    for (int i = 0; i < NUM_PARAMETERS; i++) {
+    // Only consider the objectives
+    for (int i = 0; i < NUM_OBJECTIVES; i++) {
         // If solution1 is worse than solution2 in any parameter, it cannot dominate
         if (solution1->parameters[i] > solution2->parameters[i]) {
             return false;

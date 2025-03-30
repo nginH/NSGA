@@ -1,0 +1,13 @@
+{
+    "version": 2,
+    "routes": [
+        {
+            "src": "/",
+            "dest": "/nsga_visualization.html"
+        },
+        {
+            "handle": "filesystem"
+        }
+    ],
+    "cleanUrls": true
+}

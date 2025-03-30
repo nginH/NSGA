@@ -1,0 +1,8 @@
+main.o
+nsga.o
+visualization.o
+nsga nsga_data.txt
+nsga_plot.gp
+nsga_data.txt.csv
+nsga_data.txt
+.vercel
